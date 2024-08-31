@@ -8,7 +8,7 @@ const ProductsListView = () => {
 
     useEffect(()=>{
         dispatch(productFetch())
-    },[])
+    },[dispatch])
 
     return (
         <div>
