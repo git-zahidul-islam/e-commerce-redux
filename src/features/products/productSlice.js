@@ -13,6 +13,14 @@ export const productFetch = createAsyncThunk('products/productFetch',async()=>{
     const res = await axios.get(BASE_URL);
     return res.data;
 })
+export const deleteProducts = createAsyncThunk('products/deleteProducts',async(id)=>{
+    await axios.delete(`${BASE_URL}/${id}`);
+    return id;
+})
+export const addProducts = createAsyncThunk('products/addProducts',async(product)=>{
+    const res = await axios.post(BASE_URL,product);
+    return res.data;
+})
 
 export const productSlice = createSlice({
     name: 'products',
@@ -33,6 +41,12 @@ export const productSlice = createSlice({
         .addCase(productFetch.rejected, (state,action) =>{
             state.isLoading = false,
             state.error = action.error.message
+        })
+        .addCase(deleteProducts.fulfilled, (state,action) =>{
+            state.products = state.products.filter((product)=> product.id !== action.payload)
+        })
+        .addCase(addProducts.fulfilled, (state,action) =>{
+            state.products.push(action.payload)
         })
     }
 });

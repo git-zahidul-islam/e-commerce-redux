@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { productFetch } from "./productSlice";
+import { deleteProducts, productFetch } from "./productSlice";
 
 const ProductsListView = () => {
     const {products,isLoading,error} = useSelector((state) => state.productsR)
     const dispatch = useDispatch()
+    console.log(products);
 
     useEffect(()=>{
         dispatch(productFetch())
@@ -20,6 +21,7 @@ const ProductsListView = () => {
                     <h4>{product.title}</h4>
                     <p>{product.description}</p>
                     <p>{product.price}</p>
+                    <button onClick={()=> dispatch(deleteProducts(product.id))}>Delete</button>
                 </article>
             )
            }) }
