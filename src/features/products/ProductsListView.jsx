@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProducts, productFetch } from "./productSlice";
+import { deleteProducts, productFetch, updateProducts } from "./productSlice";
 
-const ProductsListView = () => {
+const ProductsListView = ({onHandleDataPass}) => {
     const {products,isLoading,error} = useSelector((state) => state.productsR)
     const dispatch = useDispatch()
     console.log(products);
@@ -10,6 +10,10 @@ const ProductsListView = () => {
     useEffect(()=>{
         dispatch(productFetch())
     },[dispatch])
+
+    const handleEdit = (product) => {
+        onHandleDataPass(product)
+    }
 
     return (
         <div>
@@ -22,6 +26,7 @@ const ProductsListView = () => {
                     <p>{product.description}</p>
                     <p>{product.price}</p>
                     <button onClick={()=> dispatch(deleteProducts(product.id))}>Delete</button>
+                    <button onClick={()=> handleEdit(product)}>Edit</button>
                 </article>
             )
            }) }

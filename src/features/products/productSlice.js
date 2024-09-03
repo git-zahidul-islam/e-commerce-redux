@@ -9,16 +9,21 @@ const initialState = {
     error: null,
 };
 
-export const productFetch = createAsyncThunk('products/productFetch',async()=>{
+export const productFetch = createAsyncThunk('products/productFetch', async()=>{
     const res = await axios.get(BASE_URL);
     return res.data;
 })
-export const deleteProducts = createAsyncThunk('products/deleteProducts',async(id)=>{
+export const deleteProducts = createAsyncThunk('products/deleteProducts', async(id)=>{
     await axios.delete(`${BASE_URL}/${id}`);
     return id;
 })
-export const addProducts = createAsyncThunk('products/addProducts',async(product)=>{
+export const addProducts = createAsyncThunk('products/addProducts', async(product)=>{
     const res = await axios.post(BASE_URL,product);
+    return res.data;
+})
+export const updateProducts = createAsyncThunk('products/updateProducts', async({id,product})=>{
+    const res = await axios.put(`${BASE_URL}/${id}`,product);
+    console.log(res.data);
     return res.data;
 })
 
@@ -47,6 +52,10 @@ export const productSlice = createSlice({
         })
         .addCase(addProducts.fulfilled, (state,action) =>{
             state.products.push(action.payload)
+        })
+        .addCase(updateProducts.fulfilled, (state,action) =>{
+            const index = state.products.findIndex((product) => product.id === action.payload.id)
+            state.products[index] = action.payload;
         })
     }
 });
